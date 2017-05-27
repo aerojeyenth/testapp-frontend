@@ -45,7 +45,14 @@ function appCtrl($http, $window) {
         .startWith({target:{value:''}})
         .map(function (e) {
             return e.target.value;
-        });
+        })
+        .filter(function (text) {
+            //Allow only search query of more than 1 char length and 0 char length
+            //0 char length to populate full table
+            return text.length > 1 || text.length == 0;
+        })
+        .delay(500) //Insert a delay of 500ms for the user to type without hitting the servers
+        .distinctUntilChanged(); //This will make sure no duplicate query is sent to the server. 
 
     //Change event stream observable for sortBy
     var sortBy$ = Rx.Observable.fromEvent(sortBy, 'change')
