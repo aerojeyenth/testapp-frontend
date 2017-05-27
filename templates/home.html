@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp" ng-controller="appCtrl">
+<html lang="en" ng-app="myApp" ng-controller="appCtrl as vm">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -67,9 +67,12 @@
             <th>Job Title</th>
         </tr>
         </thead>
-        <tbody>
+
+        <!--Table from Python Template Engine-->
+        <!--This will be hidden when the search starts-->
+        <tbody ng-hide="vm.searchResults">
         {% for user in users %}
-            <tr>
+            <tr ng-click="vm.viewUser({{ user.id }})">
 
                 <td>{{ user.id }}</td>
                 <td>{{ user.first_name }}</td>
@@ -81,10 +84,21 @@
             </tr>
         {% endfor %}
         </tbody>
-    </table>
 
-    <!--Testing Angular-->
-        [[ welcome ]]
+        <!--Table from the Angular JS ng-repeat-->
+        <tbody ng-hide="!vm.searchResults">
+        <tr ng-repeat="user in vm.searchResults" ng-click="vm.viewUser(user.id)">
+
+            <td>[[ user.id ]]</td>
+            <td>[[ user.first_name ]]</td>
+            <td>[[ user.last_name ]]</td>
+            <td>[[ user.gender ]]</td>
+            <td>[[ user.email ]]</td>
+            <td>[[ user.job_title ]]</td>
+
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 
@@ -97,6 +111,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+<!--Adding RxJS-->
+<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.min.js"></script>
 
 <!--Angular App-->
 <script src="{{ url_for('static', filename='app/app.js') }}"></script>

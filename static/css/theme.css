@@ -2,3 +2,12 @@ body {
   padding-top: 30px;
   padding-bottom: 30px;
 }
+
+/*Adding cursor to pointer to give use a visual cue*/
+tr {
+  cursor: pointer;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
