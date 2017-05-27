@@ -28,11 +28,25 @@
 
 <div class="container">
 
-    <div class="jumbotron">
-        <h3>{{ person.first_name }} {{ person.last_name }}</h3>
-        <p>Gender: {{ person.gender }}</p>
-        <p>Email: {{ person.email }}</p>
-        <p>Job Title: {{ person.job_title }}</p>
+    <div class="row">
+        <div class="jumbotron">
+            <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+            <p>Gender: {{ person.gender }}</p>
+            <p>Email: {{ person.email }}</p>
+            <p>Job Title: {{ person.job_title }}</p>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="column pull-right">
+            <button class="btn btn-primary" onclick="goBack()">Back to Home</button>
+        </div>
     </div>
 </div>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
