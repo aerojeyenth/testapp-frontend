@@ -51,6 +51,17 @@ function appCtrl($http, $window) {
             //0 char length to populate full table
             return text.length > 1 || text.length == 0;
         })
+        .filter(function (text) {
+
+            //Regular Expression to match Email.
+            var regx = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+
+            // Checks if the text contains @ symbol if yes then matched for email pattern
+            // This will make sure the server is hit after the completion of email input only
+
+            return text.indexOf('@') >= 0 ? regx.test(text) : true;
+
+        })
         .delay(500) //Insert a delay of 500ms for the user to type without hitting the servers
         .distinctUntilChanged(); //This will make sure no duplicate query is sent to the server. 
 
