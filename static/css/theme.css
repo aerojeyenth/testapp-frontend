@@ -15,3 +15,7 @@ tr {
 .table-striped>tbody>tr:nth-of-type(even):hover {
   background-color: #ddd;
 }
+
+.form-group {
+  padding: 10px;
+}
