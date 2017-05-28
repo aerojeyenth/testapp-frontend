@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp" ng-controller="appCtrl as vm">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,7 +40,7 @@
         <div class="form-group">
             <label for="sel1">Sort by:</label>
             <select class="form-control" id="sel1">
-                <option value="id">ID</option>
+                <option value="id" selected>ID</option>
                 <option value="first_name">First Name</option>
                 <option value="last_name">Last Name</option>
                 <option value="gender">Gender</option>
@@ -51,9 +51,12 @@
         <div class="form-group">
             <label for="sel2">Order:</label>
             <select class="form-control" id="sel2">
-                <option value="asc">Ascending</option>
+                <option value="asc" selected>Ascending</option>
                 <option value="desc">Descending</option>
             </select>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" ng-click="vm.reset()">Reset</button>
         </div>
     </form>
     <table class="table table-striped">
@@ -67,9 +70,12 @@
             <th>Job Title</th>
         </tr>
         </thead>
-        <tbody>
+
+        <!--Table from Python Template Engine-->
+        <!--This will be hidden when the search starts-->
+        <tbody ng-hide="vm.searchResults">
         {% for user in users %}
-            <tr>
+            <tr ng-click="vm.viewUser({{ user.id }})">
 
                 <td>{{ user.id }}</td>
                 <td>{{ user.first_name }}</td>
@@ -81,15 +87,43 @@
             </tr>
         {% endfor %}
         </tbody>
+
+        <!--Table from the Angular JS ng-repeat-->
+        <tbody ng-hide="!vm.searchResults">
+        <tr ng-repeat="user in vm.searchResults" ng-click="vm.viewUser(user.id)">
+
+            <td>[[ user.id ]]</td>
+            <td>[[ user.first_name ]]</td>
+            <td>[[ user.last_name ]]</td>
+            <td>[[ user.gender ]]</td>
+            <td>[[ user.email ]]</td>
+            <td>[[ user.job_title ]]</td>
+
+        </tr>
+        </tbody>
+
     </table>
+    <div class="column text-center">
+        <h2 ng-show="vm.searchResults.length === 0">No Results Found</h2>
+    </div>
 </div>
 
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
+
+<!--Adding Angular JS from Google CDN-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+<!--Adding RxJS-->
+<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.min.js"></script>
+
+<!--Angular App-->
+<script src="{{ url_for('static', filename='app/app.js') }}"></script>
+
 </body>
 </html>

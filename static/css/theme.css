@@ -2,3 +2,20 @@ body {
   padding-top: 30px;
   padding-bottom: 30px;
 }
+
+/*Adding cursor to pointer to give use a visual cue*/
+tr {
+  cursor: pointer;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd):hover {
+  background-color: #ddd;
+}
+
+.table-striped>tbody>tr:nth-of-type(even):hover {
+  background-color: #ddd;
+}
+
+.form-group {
+  padding: 10px;
+}
