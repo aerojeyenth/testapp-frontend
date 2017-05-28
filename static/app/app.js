@@ -38,48 +38,62 @@ function appCtrl($http, $window) {
     }
 
 
+    function minQueryLength(text) {
+        //Allow only search query of more than 1 char length and 0 char length
+        //0 char length to populate full table
+        return text.length > 1 || text.length == 0;
+    }
+
+    function matchEmail(text) {
+
+        //Regular Expression to match Email.
+        var regx = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+
+        // Checks if the text contains @ symbol if yes then matched for email pattern
+        // This will make sure the server is hit after the completion of email input only
+
+        return text.indexOf('@') >= 0 ? regx.test(text) : true;
+
+    }
+
+
+    function getTargetValue(e) {
+        return e.target.value;
+    }
+
+    var defaultObj = {
+        "target" : {
+            "value" : ''
+        }
+    };
+
+
     //Getting the input element using its ID
     var input = document.getElementById("system-search");
     var sortBy = document.getElementById("sel1");
     var orderBy = document.getElementById("sel2");
 
+    var EventObservable = Rx.Observable.fromEvent;
+
+
     //Input event stream observable
-    var query$ = Rx.Observable.fromEvent(input, 'input')
-        .startWith({target:{value:''}})
-        .map(function (e) {
-            return e.target.value;
-        })
-        .filter(function (text) {
-            //Allow only search query of more than 1 char length and 0 char length
-            //0 char length to populate full table
-            return text.length > 1 || text.length == 0;
-        })
-        .filter(function (text) {
-
-            //Regular Expression to match Email.
-            var regx = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-
-            // Checks if the text contains @ symbol if yes then matched for email pattern
-            // This will make sure the server is hit after the completion of email input only
-
-            return text.indexOf('@') >= 0 ? regx.test(text) : true;
-
-        })
+    var query$ = EventObservable(input, 'input')
+        .startWith(defaultObj)
+        .map(getTargetValue)
+        .filter(minQueryLength)
+        .filter(matchEmail)
         .delay(500) //Insert a delay of 500ms for the user to type without hitting the servers
         .distinctUntilChanged(); //This will make sure no duplicate query is sent to the server. 
 
     //Change event stream observable for sortBy
-    var sortBy$ = Rx.Observable.fromEvent(sortBy, 'change')
-                .startWith({target:{value:'id'}})
-                .map(function (e) {
-                    return e.target.value;
-                });
+    var sortBy$ = EventObservable(sortBy, 'change')
+                .startWith(defaultObj)
+                .map(getTargetValue);
+
     //Change event stream observable for orderBy
-    var orderBy$ = Rx.Observable.fromEvent(orderBy, 'change')
-                .startWith({target:{value:'asc'}})
-                .map(function (e) {
-                    return e.target.value;
-                });
+    var orderBy$ = EventObservable(orderBy, 'change')
+                .startWith(defaultObj)
+                .map(getTargetValue);
 
     //Using Combine Latest to combine all the streams
     var searcherCombined$ = Rx.Observable.combineLatest(query$, sortBy$, orderBy$, function (query, sortBy, orderBy) {
