@@ -20,6 +20,9 @@ function appCtrl($http, $window) {
 
     //Methods
     vm.viewUser = viewUser;
+    vm.reset = reset;
+
+
 
     function viewUser(id) {
         //Redirects to the view page
@@ -95,6 +98,22 @@ function appCtrl($http, $window) {
         vm.searchResults = res.data.results;
     });
 
+    //Manually trigger the event after reset value
+    function triggerEvent(el, ev) {
+        el.dispatchEvent(new Event(ev));
+    }
+
+    function reset() {
+        //Resetting the value to defaults
+        input.value = '';
+        triggerEvent(input, 'input');
+
+        sortBy.value = 'id';
+        triggerEvent(sortBy, 'change');
+
+        orderBy.value = 'asc';
+        triggerEvent(orderBy, 'change');
+    }
 
 
 }
