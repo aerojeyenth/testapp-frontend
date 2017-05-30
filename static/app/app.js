@@ -29,8 +29,8 @@ function appCtrl($http, $window) {
 
     function search(queryObj){
 
-        let sort_by = queryObj.sortBy !== '' ? '&sort_by=' + queryObj.sortBy : '';
-        let order = queryObj.orderBy !== '' ? '&order=' + queryObj.orderBy : '';
+        let sort_by = queryObj.sortBy !== '' ? `&sort_by=${queryObj.sortBy}` : '';
+        let order = queryObj.orderBy !== '' ? `&order=${queryObj.orderBy}` : '';
 
         return $http.get(`http://127.0.0.1:5000/api/v1/search/?query=${queryObj.query}${sort_by}${order}`);
     }
